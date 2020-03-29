@@ -1,3 +1,4 @@
+import time
 from argparse import ArgumentParser
 from argparse import RawTextHelpFormatter
 
@@ -266,6 +267,8 @@ class ChessBoard():
 
 if __name__ == "__main__":
     chessboard = ChessBoard(args)
+
+    tick1 = time.clock()
     if args.num == 0:
         chessboard.BFS()
     elif args.num == 1:
@@ -276,6 +279,8 @@ if __name__ == "__main__":
         chessboard.A_star()
     elif args.num == 4:
         chessboard.IDA_star()
+    tick2 = time.clock()
+    elapsed = tick2 - tick1
 
     print("\n###############################  INFO  ###############################\n")
     info = "using algorithm: %s\n"%(chessboard.algo_dict[chessboard.algo]) +\
@@ -287,6 +292,7 @@ if __name__ == "__main__":
     if chessboard.find:
         print("the shortest path is :\n")
         chessboard.PrintPath()
+        print("elapsed time: %s"%elapsed)
     else:
         print("with [%s] algorithm, the shortest path is :"%chessboard.algo_dict[chessboard.algo])
         print("sorry, no route can acheive goal point.")
