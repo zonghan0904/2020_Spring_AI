@@ -31,6 +31,7 @@ class ChessBoard():
         self.path = dict()
         self.find = False
         self.algo_dict = {0: "BFS", 1: "DFS", 2: "IDS", 3:"A*", 4:"IDA*"}
+        self.direction = [(1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)]
         self.iter_len = 1
 
     def BFS(self):
@@ -80,109 +81,19 @@ class ChessBoard():
         if self.find:
             return True
 
-        if (not self.find) and self.allow((x + 1, y + 2)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x + 1, y + 2, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x + 1, y + 2, cost + 1))
+        for direct in self.direction:
+            if (not self.find) and self.allow((x + direct[0], y + direct[1])):
+                if self.algo == 0 or self.algo == 3 or self.algo == 4:
+                    self.frontier.append((x + direct[0], y + direct[1], cost + 1))
+                elif self.algo == 1 or self.algo == 2:
+                    self.frontier.insert(0, (x + direct[0], y + direct[1], cost + 1))
 
-            self.path[(x + 1, y + 2)] = (x, y)
+                self.path[(x + direct[0], y + direct[1])] = (x, y)
 
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x + 1, y - 2)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x + 1, y - 2, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x + 1, y - 2, cost + 1))
-
-            self.path[(x + 1, y - 2)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x - 1, y + 2)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x - 1, y + 2, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x - 1, y + 2, cost + 1))
-
-            self.path[(x - 1, y + 2)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x - 1, y - 2)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x - 1, y - 2, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x - 1, y - 2, cost + 1))
-
-            self.path[(x - 1, y - 2)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x + 2, y + 1)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x + 2, y + 1, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x + 2, y + 1, cost + 1))
-
-            self.path[(x + 2, y + 1)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x + 2, y - 1)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x + 2, y - 1, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x + 2, y - 1, cost + 1))
-
-            self.path[(x + 2, y - 1)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x - 2, y + 1)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x - 2, y + 1, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x - 2, y + 1, cost + 1))
-
-            self.path[(x - 2, y + 1)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
-
-        if (not self.find) and self.allow((x - 2, y - 1)):
-            if self.algo == 0 or self.algo == 3 or self.algo == 4:
-                self.frontier.append((x - 2, y - 1, cost + 1))
-            elif self.algo == 1 or self.algo == 2:
-                self.frontier.insert(0, (x - 2, y - 1, cost + 1))
-
-            self.path[(x - 2, y - 1)] = (x, y)
-
-            if self.algo == 1:
-                self.expand(counter)
-            if self.algo == 2 or self.algo == 4:
-                self.expand(counter - 1)
+                if self.algo == 1:
+                    self.expand(counter)
+                if self.algo == 2 or self.algo == 4:
+                    self.expand(counter - 1)
 
     def allow(self, pos):
         x, y = pos[0], pos[1]
@@ -205,38 +116,11 @@ class ChessBoard():
             return False
 
     def GoalTest(self, pos):
-        self.find = self.is_goal((pos[0] + 1, pos[1] + 2))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] + 1, pos[1] - 2))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] - 1, pos[1] + 2))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] - 1, pos[1] - 2))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] + 2, pos[1] + 1))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] + 2, pos[1] - 1))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] - 2, pos[1] + 1))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
-        self.find = self.is_goal((pos[0] - 2, pos[1] - 1))
-        if self.find:
-            self.path[(self.gx, self.gy)] = (pos[0], pos[1])
-            return True
+        for direct in self.direction:
+            self.find = self.is_goal((pos[0] + direct[0], pos[1] + direct[1]))
+            if self.find:
+                self.path[(self.gx, self.gy)] = (pos[0], pos[1])
+                return True
 
     def PrintPath(self):
         path = []
@@ -279,6 +163,11 @@ if __name__ == "__main__":
         chessboard.A_star()
     elif args.num == 4:
         chessboard.IDA_star()
+    else:
+        print("algorithm type out of bound. please using [python HW1.py --help] to get more information.")
+        print("setting default algorithm type [BFS].")
+        chessboard.algo = 0
+        chessboard.BFS()
     tick2 = time.clock()
     elapsed = tick2 - tick1
 
@@ -296,5 +185,4 @@ if __name__ == "__main__":
     else:
         print("with [%s] algorithm, the shortest path is :"%chessboard.algo_dict[chessboard.algo])
         print("sorry, no route can acheive goal point.")
-
 
