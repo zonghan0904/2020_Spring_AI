@@ -1,4 +1,5 @@
 import time
+import tracemalloc
 from argparse import ArgumentParser
 from argparse import RawTextHelpFormatter
 
@@ -200,6 +201,7 @@ class ChessBoard():
 if __name__ == "__main__":
     chessboard = ChessBoard(args)
 
+    tracemalloc.start()
     tick1 = time.clock()
     if args.num == 0:
         chessboard.BFS()
@@ -218,11 +220,13 @@ if __name__ == "__main__":
         chessboard.BFS()
     tick2 = time.clock()
     elapsed = tick2 - tick1 # elapsed time for algorithm.
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
 
     print("\n###############################  INFO  ###############################\n")
     info = "using algorithm: %s\n"%(chessboard.algo_dict[chessboard.algo]) +\
     "start point: (%d, %d)\n"%(chessboard.sx, chessboard.sy) +\
-    "goal  point: (%d, %d)\n"%(chessboard.gx, chessboard.gy)
+    "goal  point: (%d, %d)"%(chessboard.gx, chessboard.gy)
     print(info)
 
     print("\n############################### RESULT ###############################\n")
@@ -230,7 +234,9 @@ if __name__ == "__main__":
         print("the shortest path is :\n")
         chessboard.PrintPath()
         print("elapsed time: %s"%elapsed)
+        print("peak memory usage: %s"%peak)
     else:
         print("with [%s] algorithm, the shortest path is :"%chessboard.algo_dict[chessboard.algo])
         print("sorry, no route can acheive goal point.")
+    print("\n######################################################################\n")
 
