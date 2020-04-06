@@ -233,8 +233,8 @@ if __name__ == "__main__":
     if chessboard.find:
         print("the shortest path is :\n")
         chessboard.PrintPath()
-        print("elapsed time: %s"%elapsed)
-        print("peak memory usage: %s"%peak)
+        print("elapsed time: %s (second)"%elapsed)
+        print("peak memory usage: %s (KB)"%peak)
     else:
         print("with [%s] algorithm, the shortest path is :"%chessboard.algo_dict[chessboard.algo])
         print("sorry, no route can acheive goal point.")
