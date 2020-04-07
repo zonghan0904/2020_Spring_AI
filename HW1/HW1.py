@@ -121,8 +121,11 @@ class ChessBoard():
 
                 if self.algo == 1: # recursion without limits.
                     self.expand(counter)
-                if self.algo == 2 or self.algo == 4: # recursion with limits.
+                if self.algo == 2: # recursion with limits.
                     self.expand(counter - 1)
+
+        if self.algo == 4: # recursion with limits.
+            self.expand(counter - 1)
 
     def allow(self, pos):
         """
