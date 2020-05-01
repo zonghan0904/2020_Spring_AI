@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 class Minesweeper():
-    def __init__(self, fc = False):
+    def __init__(self, fc = False, heur = False):
         try:
             self.argc = len(sys.argv)
             self.size_x = int(sys.argv[1])
@@ -21,6 +21,7 @@ class Minesweeper():
         self.copy = np.array(self.board, copy = True)
         self.found = False
         self.fc = fc
+        self.heur = heur
 
     def minetest(self, bd, x, y):
         limit = bd[y][x]
@@ -59,7 +60,7 @@ class Minesweeper():
                         return False
         return True
 
-    def count3_3(self, bd, x, y):
+    def mine3_3(self, bd, x, y):
         cnt = 0
         for j in range(y-1, y+2):
             for i in range(x-1, x+2):
@@ -72,6 +73,19 @@ class Minesweeper():
 
         return cnt
 
+    def constrain3_3(self, bd, x, y):
+        cnt = 0
+        for j in range(y-1, y+2):
+            for i in range(x-1, x+2):
+                if (i < 0 or i >= self.size_x):
+                    continue
+                if (j < 0 or j >= self.size_y):
+                    continue
+                if (bd[j][i] >= 0):
+                    cnt += 1
+
+        return cnt
+
     def forward_check(self, bd, x, y):
         for j in range(y-1, y+2):
             for i in range(x-1, x+2):
@@ -80,11 +94,19 @@ class Minesweeper():
                 if (j < 0 or j >= self.size_y):
                     continue
                 if (bd[j][i] >= 0):
-                    cnt = self.count3_3(bd, i, j)
+                    cnt = self.mine3_3(bd, i, j)
                     if (cnt > bd[j][i]):
                         return False
 
         return True
+
+    def count_variable(self, bd):
+        cnt = 0
+        for i in range(self.size_x):
+            for j in range(self.size_y):
+                if (bd[j][i] == -1):
+                    cnt += 1
+        return cnt
 
 
     def backtrack(self, bd, x, y):
@@ -127,6 +149,44 @@ class Minesweeper():
             #print(child)
         self.backtrack(child, new_x, new_y)
 
+    def heuristic(self, bd, x, y, var_cnt):
+        if self.found:
+            return True
+        if (var_cnt == 0):
+            ret = self.check(bd)
+            if (ret == True and self.countmine(bd) == self.mines):
+                self.ans = np.array(bd, copy = True)
+                self.found = True
+            return
+
+        child = np.array(bd, copy = True)
+        if (self.board[y][x] == -1 and self.countmine(bd) < self.mines):
+            child[y][x] = -2
+
+        constraints = 0
+        new_x = 0
+        new_y = 0
+
+        for i in range(self.size_x):
+            for j in range(self.size_y):
+                if (child[j][i] == -1):
+                    cons = self.constrain3_3(bd, i, j)
+                    if (cons > constraints):
+                        constraints = cons
+                        new_x = i
+                        new_y = j
+
+        if (self.fc == True):
+            ret = self.forward_check(bd, new_x, new_y)
+            if (ret == True):
+                self.heuristic(child, new_x, new_y, var_cnt - 1)
+        elif (self.fc == False):
+            self.heuristic(child, new_x, new_y, var_cnt - 1)
+
+        if (self.board[y][x] == -1):
+            child[y][x] = -5
+        self.heuristic(child, new_x, new_y, var_cnt - 1)
+
     def INFO(self):
         print("\n==================================")
         print("INFO:\n")
@@ -134,6 +194,7 @@ class Minesweeper():
         print("Height: %d"%self.size_y)
         print("Total mines: %d"%self.mines)
         print("Forward checking: %s"%str(self.fc))
+        print("Using heuristic: %s"%str(self.heur))
 
 
     def printboard(self):
@@ -154,9 +215,20 @@ class Minesweeper():
         print("----" * self.size_x)
 
 
+    def solution(self):
+        if (self.heur == False):
+            self.backtrack(self.copy, 0, 0)
+        else:
+            var_cnt = self.count_variable(self.copy)
+            self.heuristic(self.copy, 0, 0, var_cnt)
+
+
 
 if __name__ == "__main__":
-    minesweeper = Minesweeper(fc = False)
+    minesweeper = Minesweeper(fc = False, heur = False)
+    minesweeper2 = Minesweeper(fc = True, heur = False)
+    minesweeper3 = Minesweeper(fc = False, heur = True)
+    minesweeper4 = Minesweeper(fc = True, heur = True)
     if (minesweeper.argc < 4):
         print("[ERROR] input format error")
         sys.exit(-1)
@@ -169,12 +241,54 @@ if __name__ == "__main__":
     minesweeper.INFO()
 
     time1 = time.time()
-    minesweeper.backtrack(minesweeper.copy, 0, 0)
+    minesweeper.solution()
     time2 = time.time()
     elapse = time2 - time1
 
     try:
         minesweeper.printboard()
+    except:
+        print("\rno solution")
+
+    print("\nelapsed time: %s (s)"%str(elapse))
+
+    minesweeper2.INFO()
+
+    time1 = time.time()
+    minesweeper2.solution()
+    time2 = time.time()
+    elapse = time2 - time1
+
+    try:
+        minesweeper2.printboard()
+    except:
+        print("\rno solution")
+
+    print("\nelapsed time: %s (s)"%str(elapse))
+
+    minesweeper3.INFO()
+
+    time1 = time.time()
+    minesweeper3.solution()
+    time2 = time.time()
+    elapse = time2 - time1
+
+    try:
+        minesweeper3.printboard()
+    except:
+        print("\rno solution")
+
+    print("\nelapsed time: %s (s)"%str(elapse))
+
+    minesweeper4.INFO()
+
+    time1 = time.time()
+    minesweeper4.solution()
+    time2 = time.time()
+    elapse = time2 - time1
+
+    try:
+        minesweeper4.printboard()
     except:
         print("\rno solution")
 
