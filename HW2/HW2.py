@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 class Minesweeper():
-    def __init__(self):
+    def __init__(self, fc = False):
         try:
             self.argc = len(sys.argv)
             self.size_x = int(sys.argv[1])
@@ -20,6 +20,7 @@ class Minesweeper():
         self.board = np.array(ls).reshape(self.size_y, self.size_x)
         self.copy = np.array(self.board, copy = True)
         self.found = False
+        self.fc = fc
 
     def minetest(self, bd, x, y):
         limit = bd[y][x]
@@ -58,20 +59,31 @@ class Minesweeper():
                         return False
         return True
 
-    def forward_check(self, bd):
-        for y in range(self.size_y):
-            for x in range(self.size_x):
-                if (bd[x][y] >= 0):
-                    for i in range(x-1, x+2):
-                        for j in range(y-1, y+2):
-                            if (i < 0 or i >= self.size_x):
-                                continue
-                            if (j < 0 or j >= self.size_y):
-                                continue
-                            if (bd[j][i] == -2):
-                                cnt += 1
-                            if (cnt > limit):
-                                return False
+    def count3_3(self, bd, x, y):
+        cnt = 0
+        for j in range(y-1, y+2):
+            for i in range(x-1, x+2):
+                if (i < 0 or i >= self.size_x):
+                    continue
+                if (j < 0 or j >= self.size_y):
+                    continue
+                if (bd[j][i] == -2):
+                    cnt += 1
+
+        return cnt
+
+    def forward_check(self, bd, x, y):
+        for j in range(y-1, y+2):
+            for i in range(x-1, x+2):
+                if (i < 0 or i >= self.size_x):
+                    continue
+                if (j < 0 or j >= self.size_y):
+                    continue
+                if (bd[j][i] >= 0):
+                    cnt = self.count3_3(bd, i, j)
+                    if (cnt > bd[j][i]):
+                        return False
+
         return True
 
 
@@ -88,7 +100,7 @@ class Minesweeper():
         child = np.array(bd, copy = True)
         if (self.board[y][x] == -1 and self.countmine(bd) < self.mines):
             child[y][x] = -2
-            print(child)
+            #print(child)
         new_x = (x + 1) % self.size_x
         new_y = y
         if (new_x == 0):
@@ -102,11 +114,27 @@ class Minesweeper():
                     new_y += 1
                 if (new_y >= self.size_y or new_x >= self.size_x):
                     break
-        self.backtrack(child, new_x, new_y)
+
+        if (self.fc == True):
+            ret = self.forward_check(bd, new_x, new_y)
+            if (ret == True):
+                self.backtrack(child, new_x, new_y)
+        elif (self.fc == False):
+            self.backtrack(child, new_x, new_y)
+
         if (self.board[y][x] == -1):
             child[y][x] = -5
-            print(child)
+            #print(child)
         self.backtrack(child, new_x, new_y)
+
+    def INFO(self):
+        print("\n==================================")
+        print("INFO:\n")
+        print("Width: %d"%self.size_x)
+        print("Height: %d"%self.size_y)
+        print("Total mines: %d"%self.mines)
+        print("Forward checking: %s"%str(self.fc))
+
 
     def printboard(self):
         print("\n==================================\n")
@@ -128,7 +156,7 @@ class Minesweeper():
 
 
 if __name__ == "__main__":
-    minesweeper = Minesweeper()
+    minesweeper = Minesweeper(fc = False)
     if (minesweeper.argc < 4):
         print("[ERROR] input format error")
         sys.exit(-1)
@@ -138,6 +166,8 @@ if __name__ == "__main__":
         print("[ERROR] board not complete")
         sys.exit(0)
 
+    minesweeper.INFO()
+
     time1 = time.time()
     minesweeper.backtrack(minesweeper.copy, 0, 0)
     time2 = time.time()
@@ -146,7 +176,7 @@ if __name__ == "__main__":
     try:
         minesweeper.printboard()
     except:
-        print("no solution")
+        print("\rno solution")
 
     print("\nelapsed time: %s (s)"%str(elapse))
 ##
