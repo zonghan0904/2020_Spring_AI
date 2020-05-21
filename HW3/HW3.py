@@ -97,7 +97,7 @@ class Player():
             self.height = 16
             self.mines = 99
 
-        self.board = np.full((self.height, self.width), np.inf)
+        self.board = np.full((self.height, self.width), -10)
 
     def play(self):
         single = False
@@ -111,6 +111,7 @@ class Player():
             self.mark(cell)
             self.KB0[cell] = self.KB[cell]
             self.matching(cell)
+            self.gen_clauses(cell[0][0], cell[0][1])
             self.KB.pop(cell, None)
         else:
             self.matching()
@@ -120,51 +121,103 @@ class Player():
         y = cell[0][1]
         if (self.KB[cell] == 0):
             self.board[y][x] = self.query(x, y)
-            self.gen_clauses(x, y)
         elif (self.KB[cell] == 1):
             self.board[y][x] = -1
 
-    def matching(self, cell = None):
-        if (cell == None):
-            pass
-        else:
-            # check duplicate and subsumption
-            state = self.KB[cell]
-            for key in self.KB.keys():
-                if self.KB[key] == state:
+    def clean_subsumption(self):
+        pop_ls = []
+        for key in self.KB.keys():
+            for other in self.KB.keys():
+                if (key == other):
                     continue
-                else:
-                    pass
+                if (set(key).issubset(set(other))) and (self.KB[key] == self.KB[other]):
+                    pop_ls.append(other)
+        for key in pop_ls:
+            self.KB.pop(key, None)
 
-    def insert(self):
-        pass
+    def matching(self, cell = None):
+        self.clean_subsumption()
+        if (cell == None):
+            for key in self.KB.keys():
+                if (len(key) > 2):
+                    continue
+                state = self.KB[key]
+                for other in self.KB.keys():
+                    if (key == other):
+                        continue
+                    if (set(key).issubset(set(other))):
+                       pass
+            #for key in self.KB.keys():
+            #    print("key is ", end = "")
+            #    print(key)
+            #    print("value is ", end = "")
+            #    print(self.KB[key])
+
+        else:
+            state = self.KB[cell]
+            pop_ls = []
+            new_key = []
+
+            for key in self.KB.keys():
+                if key == cell:
+                    continue
+                if (state == 0):
+                    if (cell[0] in set(key)) and (self.KB[key] == 1):
+                        temp = list(key)
+                        temp.remove(cell[0])
+                        pop_ls.append(key)
+                        new_key.append(temp)
+                elif (state == 1):
+                    if (cell[0] in set(key)) and (self.KB[key] == 1):
+                        pop_ls.append(key)
+
+            for key in pop_ls:
+                self.KB.pop(key, None)
+            for key in new_key:
+                self.KB[tuple(key)] = 1
 
     def query(self, x, y):
         reply = self.game.hint(x, y)
         return reply
 
     def gen_clauses(self, x, y):
-        mines_cnt = int(self.board[y][x])
+        mines_cnt = self.board[y][x]
         unmark_cnt, unmark_ls = self.cal_unmark(x, y)
+        known_mines = self.cal_mines(x, y)
+        mines_cnt -= known_mines
 
-        if (mines_cnt == 0):
-            for cell in unmark_ls:
-                i = cell[0]
-                j = cell[1]
-                self.KB[tuple([(i, j)])] = 0
-        elif (mines_cnt == unmark_cnt):
-            for cell in unmark_ls:
-                i = cell[0]
-                j = cell[1]
-                self.KB[tuple([(i, j)])] = 1
-        elif (unmark_cnt > mines_cnt):
-            combs = list(combinations(unmark_ls, unmark_cnt - mines_cnt + 1))
-            for comb in combs:
-                ls = []
-                for cell in comb:
-                    ls.append(cell)
-                self.KB[tuple(ls)] = 1
+        if (mines_cnt >= 0):
+            if (mines_cnt == 0):
+                for cell in unmark_ls:
+                    i = cell[0]
+                    j = cell[1]
+                    self.KB[tuple([(i, j)])] = 0
+            elif (mines_cnt == unmark_cnt):
+                for cell in unmark_ls:
+                    i = cell[0]
+                    j = cell[1]
+                    self.KB[tuple([(i, j)])] = 1
+            elif (unmark_cnt > mines_cnt):
+                combs = list(combinations(unmark_ls, unmark_cnt - mines_cnt + 1))
+                for comb in combs:
+                    ls = []
+                    for cell in comb:
+                        ls.append(cell)
+                    self.KB[tuple(ls)] = 1
 
+    def cal_mines(self, x, y):
+        num = 0
+        for j in range (y-1, y+2):
+            for i in range (x-1, x+2):
+                if (i < 0 or i >= self.width):
+                    continue
+                if (j < 0 or j >= self.height):
+                    continue
+                if (i == x and j == y):
+                    continue
+                if (self.board[j][i] == -1):
+                    num += 1
+        return num
 
     def cal_unmark(self, x, y):
         num = 0
@@ -177,7 +230,7 @@ class Player():
                     continue
                 if (i == x and j == y):
                     continue
-                if (self.board[j][i] == np.inf):
+                if (self.board[j][i] == -10):
                     num += 1
                     ls.append((i, j))
         return num, ls
@@ -188,7 +241,7 @@ class Player():
             for i in range(self.width):
                 if (i == 0):
                     print("|", end = "")
-                if (self.board[j][i] == np.inf):
+                if (self.board[j][i] == -10):
                     print("   ", end = "|")
                 elif (self.board[j][i] == -1):
                     print('\033[31m' + " * " + '\x1b[0m', end = "|")
@@ -202,6 +255,16 @@ if __name__ == "__main__":
     game = Minesweeper(level = LEVEL)
     game.display()
     player = Player(game)
-    player.play()
+    for i in range(100):
+        #print("epoch %d" %(i + 1))
+        player.play()
     player.result()
-
+    print(ini_safe_ls)
+    counter = 0
+    for key in player.KB.keys():
+        print("key: ", end = "")
+        print(key)
+        print("value: ", end = "")
+        print(player.KB[key])
+        counter += 1
+    print(counter)
