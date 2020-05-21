@@ -2,12 +2,12 @@ import numpy as np
 #np.random.seed(0)
 from math import sqrt
 from itertools import combinations
+from argparse import ArgumentParser
 
-
-#============================================
-# todo: implement endgame double check
-#============================================
-
+parser = ArgumentParser()
+parser.add_argument("--level", "-L", type = str, default = "easy")
+parser.add_argument("--display", "-D", action = "store_true")
+args = parser.parse_args()
 
 ini_safe_ls = []
 LEVEL = "easy"
@@ -30,8 +30,8 @@ class Minesweeper():
             self.width = 30
             self.height = 16
             self.mines = 99
-        #self.ini_safe_num = round(sqrt(self.width * self.height))
-        self.ini_safe_num = self.width * self.height / 2
+        self.ini_safe_num = round(sqrt(self.width * self.height))
+        #self.ini_safe_num = self.width * self.height / 2
         self.gen_board()
 
     def gen_board(self):
@@ -156,11 +156,6 @@ class Player():
                         continue
                     if (set(key).issubset(set(other))):
                        pass
-            #for key in self.KB.keys():
-            #    print("key is ", end = "")
-            #    print(key)
-            #    print("value is ", end = "")
-            #    print(self.KB[key])
 
         else:
             state = self.KB[cell]
@@ -244,7 +239,7 @@ class Player():
                     ls.append((i, j))
         return num, ls
 
-    def result(self):
+    def display(self):
         for j in range(self.height):
             print("----" * self.width)
             for i in range(self.width):
@@ -271,22 +266,59 @@ class Player():
                     if (self.board[j][i] == -10):
                         self.board[j][i] = self.query(i, j)
 
+    def check_residual(self):
+        for j in range(self.height):
+            for i in range(self.width):
+                unmark_cnt, unmark_ls = self.cal_unmark(i, j)
+                if (unmark_cnt > 0):
+                    mines_cnt = self.board[j][i]
+                    known_mines = self.cal_mines(i, j)
+                    mines_cnt -= known_mines
+                    if (mines_cnt >= 0):
+                        if (mines_cnt == 0):
+                            for cell in unmark_ls:
+                                i = cell[0]
+                                j = cell[1]
+                                self.KB[tuple([(i, j)])] = 0
+                        elif (mines_cnt == unmark_cnt):
+                            for cell in unmark_ls:
+                                i = cell[0]
+                                j = cell[1]
+                                self.KB[tuple([(i, j)])] = 1
+                        elif (unmark_cnt > mines_cnt):
+                            combs = list(combinations(unmark_ls, unmark_cnt - mines_cnt + 1))
+                            for comb in combs:
+                                ls = []
+                                for cell in comb:
+                                    ls.append(cell)
+                                self.KB[tuple(ls)] = 1
+
+    def retry(self):
+        self.endgame = False
+        self.KB.clear()
+        self.check_residual()
+        self.play()
+
+    def result(self):
+        for j in range(self.height):
+            for i in range(self.width):
+                if (self.board[j][i] == -10):
+                    return False
+        return True
+
 
 if __name__ == "__main__":
-    game = Minesweeper(level = LEVEL)
-    game.display()
+    game = Minesweeper(level = args.level)
     player = Player(game)
+
     while (player.endgame != True):
-        #print("epoch %d" %(i + 1))
         player.play()
+        if (player.endgame == True):
+            player.retry()
     player.global_constraint()
-    player.result()
-    print(ini_safe_ls)
-    counter = 0
-    for key in player.KB.keys():
-        print("key: ", end = "")
-        print(key)
-        print("value: ", end = "")
-        print(player.KB[key])
-        counter += 1
-    print(counter)
+    result = player.result()
+    print("success: " + str(result))
+
+    if (args.display):
+        game.display()
+        player.display()
