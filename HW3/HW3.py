@@ -1,7 +1,13 @@
 import numpy as np
-np.random.seed(0)
+#np.random.seed(0)
 from math import sqrt
 from itertools import combinations
+
+
+#============================================
+# todo: implement endgame double check
+#============================================
+
 
 ini_safe_ls = []
 LEVEL = "easy"
@@ -24,7 +30,8 @@ class Minesweeper():
             self.width = 30
             self.height = 16
             self.mines = 99
-        self.ini_safe_num = round(sqrt(self.width * self.height))
+        #self.ini_safe_num = round(sqrt(self.width * self.height))
+        self.ini_safe_num = self.width * self.height / 2
         self.gen_board()
 
     def gen_board(self):
@@ -83,6 +90,7 @@ class Player():
         self.KB = dict({i:0 for i in ini_safe_ls})
         self.KB0 = dict()
         self.game = game
+        self.endgame = False
 
         if self.game.level == "easy":
             self.width = 9
@@ -114,6 +122,7 @@ class Player():
             self.gen_clauses(cell[0][0], cell[0][1])
             self.KB.pop(cell, None)
         else:
+            self.endgame = True
             self.matching()
 
     def mark(self, cell):
@@ -250,14 +259,27 @@ class Player():
             print("")
         print("----" * self.width)
 
+    def global_constraint(self):
+        count = 0
+        for j in range(self.height):
+            for i in range(self.width):
+                if (self.board[j][i] == -1):
+                    count += 1
+        if (count == self.mines):
+            for j in range(self.height):
+                for i in range(self.width):
+                    if (self.board[j][i] == -10):
+                        self.board[j][i] = self.query(i, j)
+
 
 if __name__ == "__main__":
     game = Minesweeper(level = LEVEL)
     game.display()
     player = Player(game)
-    for i in range(100):
+    while (player.endgame != True):
         #print("epoch %d" %(i + 1))
         player.play()
+    player.global_constraint()
     player.result()
     print(ini_safe_ls)
     counter = 0
