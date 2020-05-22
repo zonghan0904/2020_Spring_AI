@@ -5,9 +5,9 @@ from itertools import combinations
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
-parser.add_argument("--level", "-L", type = str, default = "easy")
-parser.add_argument("--display", "-D", action = "store_true")
-parser.add_argument("--hint", "-H", type = str, default = "less")
+parser.add_argument("--level", "-L", type = str, default = "easy") # set game difficulty level
+parser.add_argument("--display", "-D", action = "store_true") # set display or not
+parser.add_argument("--hint", "-H", type = str, default = "less") # set amount of initial safe cells
 args = parser.parse_args()
 
 ini_safe_ls = []
@@ -41,6 +41,9 @@ class Minesweeper():
         self.gen_board()
 
     def gen_board(self):
+        """
+        randomly generate the board and initial safe cells
+        """
         self.board = np.zeros([self.height, self.width])
         rand_seq = np.random.permutation(self.height * self.width)
         for i in range(self.mines):
@@ -50,6 +53,9 @@ class Minesweeper():
         self.ini_safe()
 
     def hint(self, x, y):
+        """
+        give player hint when the player query
+        """
         counter = 0
         for j in range(y-1, y+2):
             for i in range(x-1, x+2):
@@ -64,6 +70,9 @@ class Minesweeper():
         return counter
 
     def ini_safe(self):
+        """
+        randomly generate the initial safe cells
+        """
         counter = 0
         i = 0
         rand_seq = np.random.permutation(self.width * self.height)
@@ -76,6 +85,9 @@ class Minesweeper():
             i += 1
 
     def display(self):
+        """
+        display the solution
+        """
         for j in range(self.height):
             print("----" * self.width)
             for i in range(self.width):
@@ -114,6 +126,9 @@ class Player():
         self.board = np.full((self.height, self.width), -10)
 
     def play(self):
+        """
+        the game flow in each iteration
+        """
         single = False
         cell = tuple()
         for key in self.KB.keys():
@@ -132,6 +147,9 @@ class Player():
             self.matching()
 
     def mark(self, cell):
+        """
+        mark the cell as safe or mined
+        """
         x = cell[0][0]
         y = cell[0][1]
         if (self.KB[cell] == 0):
@@ -140,6 +158,9 @@ class Player():
             self.board[y][x] = -1
 
     def clean_subsumption(self):
+        """
+        check subsumption condition
+        """
         pop_ls = []
         for key in self.KB.keys():
             for other in self.KB.keys():
@@ -151,6 +172,9 @@ class Player():
             self.KB.pop(key, None)
 
     def matching(self, cell = None):
+        """
+        matching two clauses
+        """
         self.clean_subsumption()
         if (cell == None):
             for key in self.KB.keys():
@@ -187,10 +211,16 @@ class Player():
                 self.KB[tuple(key)] = 1
 
     def query(self, x, y):
+        """
+        query game control module to get the hint
+        """
         reply = self.game.hint(x, y)
         return reply
 
     def gen_clauses(self, x, y):
+        """
+        generating clauses from the hints
+        """
         mines_cnt = self.board[y][x]
         unmark_cnt, unmark_ls = self.cal_unmark(x, y)
         known_mines = self.cal_mines(x, y)
@@ -216,6 +246,9 @@ class Player():
                     self.KB[tuple(ls)] = 1
 
     def cal_mines(self, x, y):
+        """
+        calculate how much mines around the cell
+        """
         num = 0
         for j in range (y-1, y+2):
             for i in range (x-1, x+2):
@@ -230,6 +263,9 @@ class Player():
         return num
 
     def cal_unmark(self, x, y):
+        """
+        calculate how much unmarked cell around the cell and return list
+        """
         num = 0
         ls = []
         for j in range (y-1, y+2):
@@ -246,6 +282,9 @@ class Player():
         return num, ls
 
     def display(self):
+        """
+        display the player's answer
+        """
         for j in range(self.height):
             print("----" * self.width)
             for i in range(self.width):
@@ -261,6 +300,9 @@ class Player():
         print("----" * self.width)
 
     def global_constraint(self):
+        """
+        check whether the answer satisfy the global constraints.
+        """
         count = 0
         for j in range(self.height):
             for i in range(self.width):
@@ -273,6 +315,9 @@ class Player():
                         self.board[j][i] = self.query(i, j)
 
     def check_residual(self):
+        """
+        check the residual
+        """
         for j in range(self.height):
             for i in range(self.width):
                 unmark_cnt, unmark_ls = self.cal_unmark(i, j)
@@ -300,12 +345,18 @@ class Player():
                                 self.KB[tuple(ls)] = 1
 
     def retry(self):
+        """
+        retry before endgame with fail
+        """
         self.endgame = False
         self.KB.clear()
         self.check_residual()
         self.play()
 
     def result(self):
+        """
+        return whether the answer reach success state
+        """
         for j in range(self.height):
             for i in range(self.width):
                 if (self.board[j][i] == -10):
