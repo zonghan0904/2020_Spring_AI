@@ -7,17 +7,18 @@ from argparse import ArgumentParser
 parser = ArgumentParser()
 parser.add_argument("--level", "-L", type = str, default = "easy")
 parser.add_argument("--display", "-D", action = "store_true")
+parser.add_argument("--hint", "-H", type = str, default = "less")
 args = parser.parse_args()
 
 ini_safe_ls = []
-LEVEL = "easy"
 
 class Minesweeper():
     '''
     game control module
     '''
-    def __init__(self, level = "easy"):
+    def __init__(self, level = "easy", hint = "less"):
         self.level = level
+        self.hint_num = hint
         if self.level == "easy":
             self.width = 9
             self.height = 9
@@ -30,8 +31,13 @@ class Minesweeper():
             self.width = 30
             self.height = 16
             self.mines = 99
-        self.ini_safe_num = round(sqrt(self.width * self.height))
-        #self.ini_safe_num = self.width * self.height / 2
+        if self.hint_num == "less":
+            self.ini_safe_num = round(sqrt(self.width * self.height))
+        elif self.hint_num == "middle":
+            self.ini_safe_num = int(self.width * self.height / 3)
+        elif self.hint_num == "more":
+            self.ini_safe_num = self.width * self.height / 2
+
         self.gen_board()
 
     def gen_board(self):
@@ -308,7 +314,7 @@ class Player():
 
 
 if __name__ == "__main__":
-    game = Minesweeper(level = args.level)
+    game = Minesweeper(level = args.level, hint = args.hint)
     player = Player(game)
 
     while (player.endgame != True):
@@ -317,8 +323,8 @@ if __name__ == "__main__":
             player.retry()
     player.global_constraint()
     result = player.result()
-    print("success: " + str(result))
 
     if (args.display):
         game.display()
         player.display()
+    print("success: " + str(result))
