@@ -1,12 +1,15 @@
 import numpy as np
+import random
+import math
 import collections
 # np.random.seed(0)
 
 ######## HYPER PARAMETERS ########
-ATTR_NUM = 4
+ATTR_NUM = 34
 VALID_RATIO = 0.2
-SAMPLING_RATE = 0.6
-TREE_NUM = 5
+SAMPLING_RATE = 0.3
+TREE_NUM = 100
+FILE_NAME = "ionosphere.data"
 ##################################
 
 class Node():
@@ -24,6 +27,7 @@ class DecisionTree():
     def __init__(self, data_x = None, data_y = None):
         self.root = Node(None, None)
         self.attr_num = ATTR_NUM
+        self.bagging = int(math.sqrt(self.attr_num))
 
         if (data_x != None and data_y != None):
             self.root.data_x = data_x
@@ -44,16 +48,21 @@ class DecisionTree():
         num = len(set(node.data_y))
         return num
 
-    def attr_selector(self, node):
+    def attr_selector(self, node, attr_ls = []):
         best_attr = -1
         best_thre = 0.0
         lowest_impurity = float("inf")
+        attrs = []
+        if attr_ls == []:
+            attrs = list(np.arange(self.attr_num))
+        else:
+            attrs = list(attr_ls)
         n = len(node.data_x)
 
-        for i in range(self.attr_num):
+        for attr in attrs:
             values = set()
             for data in node.data_x:
-                values.add(data[i])
+                values.add(data[attr])
             values = list(values)
             values.sort()
 
@@ -64,7 +73,7 @@ class DecisionTree():
                 left = {key: 0 for key in node.data_y}
 
                 for k in range(n):
-                    if (node.data_x[k][i] > thre):
+                    if (node.data_x[k][attr] > thre):
                         right[node.data_y[k]] += 1
                     else:
                         left[node.data_y[k]] += 1
@@ -87,7 +96,7 @@ class DecisionTree():
                 remain = sum(nA) * GA + sum(nB) * GB
                 if remain < lowest_impurity:
                     best_thre = thre
-                    best_attr = i
+                    best_attr = attr
 
         return best_attr, best_thre
 
@@ -99,7 +108,8 @@ class DecisionTree():
             node.leaf = True
             node.label = node.data_y[0]
         else:
-            attr, thre = self.attr_selector(node)
+            attr_ls = random.sample(list(np.arange(self.attr_num)), k = self.bagging)
+            attr, thre = self.attr_selector(node, [])
             node.attr = attr
             node.thre = thre
 
@@ -240,7 +250,7 @@ if __name__ == "__main__":
     # tree.predict([5.0,3.4,1.5,0.2])
 
     forest = RandomForest()
-    forest.load_data("iris.data")
+    forest.load_data(FILE_NAME)
     forest.data_split()
     forest.gen_forest(tree_num = TREE_NUM)
     forest.train()
