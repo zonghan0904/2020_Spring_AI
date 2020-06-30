@@ -7,6 +7,7 @@ class Node():
         self.leaf = False
         self.data_x = []
         self.data_y = []
+        self.predicted_ans = ""
 
 class DecisionTree():
     def __init__(self, file_name):
@@ -84,6 +85,7 @@ class DecisionTree():
 
         if num == 1:
             node.leaf = True
+            node.predicted_ans = node.data_y[0]
         else:
             attr, thre = self.attr_selector(node)
             node.attr = attr
@@ -109,18 +111,20 @@ class DecisionTree():
     def train(self):
         self.build_tree(self.root)
 
-    def predict(self, node, data):
+    def path(self, node, data):
         if (node.leaf == True):
-            print(node.data_y[0])
+            print(node.predicted_ans)
         else:
             if (data[node.attr] < node.thre):
-                self.predict(node.left, data)
+                self.path(node.left, data)
             else:
-                self.predict(node.right, data)
+                self.path(node.right, data)
 
+    def predict(self, data):
+        self.path(self.root, data)
 
 if __name__ == "__main__":
     tree = DecisionTree("iris.data")
     tree.load_data()
     tree.train()
-    tree.predict(tree.root, [5.0,3.4,1.5,0.2])
+    tree.predict([5.0,3.4,1.5,0.2])
