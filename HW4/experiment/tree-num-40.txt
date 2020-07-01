@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.0%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 83.14285714285712%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 84.38095238095238%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.57142857142856%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 83.6%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.47619047619047%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 79.51020408163265%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 77.0%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 40
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 71.46031746031747%
+

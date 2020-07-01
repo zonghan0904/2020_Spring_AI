@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 70.0%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 71.42857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 70.76190476190477%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 63.357142857142854%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 72.11428571428573%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 66.42857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 65.22448979591834%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 63.5%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 2
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 57.87301587301587%
+

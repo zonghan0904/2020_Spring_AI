@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.85714285714285%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.0%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.57142857142856%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.71428571428571%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.0%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.14285714285714%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.22448979591837%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 78.17857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 60
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 72.63492063492063%
+

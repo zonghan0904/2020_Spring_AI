@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 85.71428571428571%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 85.14285714285714%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 84.19047619047619%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 83.42857142857142%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.22857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.57142857142856%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 80.57142857142857%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 77.96428571428571%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 80
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 68.0952380952381%
+

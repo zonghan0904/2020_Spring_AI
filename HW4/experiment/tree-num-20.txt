@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 83.42857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.42857142857142%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.76190476190474%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 83.7142857142857%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 84.62857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 80.57142857142857%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.06122448979592%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 77.0%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 20
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 73.39682539682539%
+

@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 82.57142857142858%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.57142857142858%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 79.14285714285714%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.78571428571428%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 80.68571428571427%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 79.33333333333333%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 80.08163265306122%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 72.5%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 7
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 70.31746031746032%
+

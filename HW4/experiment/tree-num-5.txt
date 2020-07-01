@@ -1,0 +1,90 @@
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.100000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.42857142857143%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.200000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 80.85714285714285%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.300000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 79.04761904761905%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.400000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 79.07142857142857%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.500000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 81.14285714285714%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.600000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 79.28571428571428%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.700000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 76.24489795918367%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.800000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 72.21428571428572%
+
+######### FOREST INFO #########
+file: ionosphere.data
+tree number: 5
+valid ratio: 0.900000
+sampling rate: 0.300000
+attribute number: 34
+###############################
+
+correct classification rates: 73.01587301587303%
+

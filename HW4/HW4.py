@@ -8,8 +8,9 @@ import collections
 ATTR_NUM = 34
 VALID_RATIO = 0.2
 SAMPLING_RATE = 0.3
-TREE_NUM = 100
+TREE_NUM = 1
 FILE_NAME = "ionosphere.data"
+TEST_CNT = 10
 ##################################
 
 class Node():
@@ -239,9 +240,29 @@ class RandomForest():
             # else:
             #     print("predicted: %s, answer: %s"%(ans, self.valid_y[i]))
             print("finish %d / %d" %(i+1, self.valid_cnt))
-        print("correct num: %d" %correct_num)
+        # print("correct num: %d" %correct_num)
         acc = correct_num / self.valid_cnt
         print("correct classification rates: {a}%".format(a = acc * 100))
+        return acc
+
+    def get_info(self):
+        info = "######### FOREST INFO #########\n" + \
+               "file: %s\n"%FILE_NAME + \
+               "tree number: %d\n"%self.tree_num + \
+               "valid ratio: %f\n"%self.valid_ratio + \
+               "sampling rate: %f\n"%self.sampling_rate + \
+               "attribute number: %d\n"%self.attr_num + \
+               "###############################\n\n"
+        return info
+
+    def save_result(self, acc):
+        info = self.get_info()
+        result = info + "correct classification rates: {a}%\n\n".format(a = acc * 100)
+        file_name = "experiment/tree-num-%d.txt"%self.tree_num
+        with open(file_name, "a") as f:
+            f.write(result)
+        print("\n[INFO] Result saved to %s ..."%file_name)
+
 
 if __name__ == "__main__":
     # tree = DecisionTree()
@@ -249,11 +270,22 @@ if __name__ == "__main__":
     # tree.train()
     # tree.predict([5.0,3.4,1.5,0.2])
 
-    forest = RandomForest()
-    forest.load_data(FILE_NAME)
-    forest.data_split()
-    forest.gen_forest(tree_num = TREE_NUM)
-    forest.train()
+    ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+
+    for num in nums:
+        TREE_NUM = num
+        for ratio in ratios:
+            VALID_RATIO = ratio
+            acc = 0
+            for i in range(TEST_CNT):
+                forest = RandomForest()
+                forest.load_data(FILE_NAME)
+                forest.data_split()
+                forest.gen_forest(tree_num = TREE_NUM)
+                forest.train()
+                acc += forest.validation()
+            forest.save_result(acc / TEST_CNT)
+
     # ans = forest.predict([6.3,2.5,5.0,1.9])
     # print(ans)
-    forest.validation()
