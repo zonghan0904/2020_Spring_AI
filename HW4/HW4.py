@@ -14,6 +14,10 @@ TEST_CNT = 10
 ##################################
 
 class Node():
+    """
+    the node in decision tree.
+    discribe spliting attribute and threshold.
+    """
     def __init__(self, attr, thre):
         self.attr = attr
         self.thre = thre
@@ -25,6 +29,9 @@ class Node():
         self.label = ""
 
 class DecisionTree():
+    """
+    decision tree using CART as base tree.
+    """
     def __init__(self, data_x = None, data_y = None):
         self.root = Node(None, None)
         self.attr_num = ATTR_NUM
@@ -35,6 +42,9 @@ class DecisionTree():
             self.root.data_y = data_y
 
     def load_data(self, file_name):
+        """
+        load dataset downloaded from UCI Machine Learning Repository.
+        """
         with open(file_name, "r") as f:
             l = f.readline()
             while (l):
@@ -46,10 +56,16 @@ class DecisionTree():
                 self.root.data_x[i][j] = float(self.root.data_x[i][j])
 
     def num_classes(self, node):
+        """
+        return how many classes in current node.
+        """
         num = len(set(node.data_y))
         return num
 
     def attr_selector(self, node, attr_ls = []):
+        """
+        according to gini's inpurity to select an attribute and threshold.
+        """
         best_attr = -1
         best_thre = 0.0
         lowest_impurity = float("inf")
@@ -103,6 +119,10 @@ class DecisionTree():
 
 
     def build_tree(self, node):
+        """
+        the core of decision tree's training part.
+        function will keep recursively calling itselt until reach leaf nodes.
+        """
         num = self.num_classes(node)
 
         if num == 1:
@@ -110,7 +130,7 @@ class DecisionTree():
             node.label = node.data_y[0]
         else:
             attr_ls = random.sample(list(np.arange(self.attr_num)), k = self.bagging)
-            attr, thre = self.attr_selector(node, [])
+            attr, thre = self.attr_selector(node, attr_ls)
             node.attr = attr
             node.thre = thre
 
@@ -132,9 +152,15 @@ class DecisionTree():
             node.left = left
 
     def train(self):
+        """
+        train decision tree.
+        """
         self.build_tree(self.root)
 
     def path(self, node, data):
+        """
+        to find the predicted answer.
+        """
         if (node.leaf == True):
             self.predicted_ans = node.label
         else:
@@ -144,10 +170,16 @@ class DecisionTree():
                 self.path(node.right, data)
 
     def predict(self, data):
+        """
+        get the predicted answer.
+        """
         self.path(self.root, data)
         return self.predicted_ans
 
 class RandomForest():
+    """
+    random forest features tree bagging and attribute bagging.
+    """
     def __init__(self):
         self.data_x = []
         self.data_y = []
@@ -158,6 +190,9 @@ class RandomForest():
         self.attr_num = ATTR_NUM
 
     def load_data(self, file_name):
+        """
+        load dataset downloaded from UCI Machine Learning Repository.
+        """
         with open(file_name, "r") as f:
             l = f.readline()
             counter = 0
@@ -176,6 +211,9 @@ class RandomForest():
         self.train_cnt = self.data_cnt - self.valid_cnt
 
     def data_split(self):
+        """
+        splitting data into training subset and validation subset.
+        """
         train_ls = np.random.permutation(np.arange(self.data_cnt))[:self.train_cnt]
         valid_ls = []
         for i in range(self.data_cnt):
@@ -193,6 +231,9 @@ class RandomForest():
             self.valid_y.append(self.data_y[i])
 
     def tree_bagging(self):
+        """
+        randomly sampling small part of data.
+        """
         sample_cnt = int(self.sampling_rate * self.train_cnt)
         data_ls = np.random.permutation(np.arange(self.train_cnt))[:sample_cnt]
         data_x = []
@@ -205,6 +246,9 @@ class RandomForest():
         return data_x, data_y
 
     def gen_forest(self, tree_num = 3):
+        """
+        generate decision trees to build the random forest.
+        """
         print("\n[INFO] Start generating random forest ...")
         self.tree_num = tree_num
         for i in range(self.tree_num):
@@ -214,6 +258,9 @@ class RandomForest():
             print("finish %d / %d" %(i+1, self.tree_num))
 
     def train(self):
+        """
+        train each decision trees in the random forest.
+        """
         print("\n[INFO] Start training ...")
         i = 0
         for tree in self.trees:
@@ -222,6 +269,9 @@ class RandomForest():
             i += 1
 
     def predict(self, data):
+        """
+        get the predicted answer via voting among decision trees.
+        """
         answers = []
         for tree in self.trees:
             predicted_ans = tree.predict(data)
@@ -230,6 +280,10 @@ class RandomForest():
         return ans
 
     def validation(self):
+        """
+        using validation subset to test the model.
+        will return the predicted accuracy.
+        """
         print("\n[INFO] Start validation ...")
         acc = 0.0
         correct_num = 0
@@ -246,6 +300,9 @@ class RandomForest():
         return acc
 
     def get_info(self):
+        """
+        return the model's information.
+        """
         info = "######### FOREST INFO #########\n" + \
                "file: %s\n"%FILE_NAME + \
                "tree number: %d\n"%self.tree_num + \
@@ -256,6 +313,9 @@ class RandomForest():
         return info
 
     def save_result(self, acc):
+        """
+        saving the validation result.
+        """
         info = self.get_info()
         result = info + "correct classification rates: {a}%\n\n".format(a = acc * 100)
         file_name = "experiment/tree-num-%d.txt"%self.tree_num
@@ -270,15 +330,17 @@ if __name__ == "__main__":
     # tree.train()
     # tree.predict([5.0,3.4,1.5,0.2])
 
+    ############################## test case ##############################
     ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    #######################################################################
 
     for num in nums:
         TREE_NUM = num
         for ratio in ratios:
             VALID_RATIO = ratio
             acc = 0
-            for i in range(TEST_CNT):
+            for i in range(TEST_CNT):                   # experiment multiple times to average out the noises.
                 forest = RandomForest()
                 forest.load_data(FILE_NAME)
                 forest.data_split()
